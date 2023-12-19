@@ -32,6 +32,8 @@ export const CandidateSchema = new mongoose.Schema({
   aboutMe: String,
   experience: [ExperienceSchema],
   education: [EducationSchema],
+  acceptedJobs: [{}],
+  rejectedJobs: [{}],
 });
 
 export interface Candidate extends mongoose.Document {
@@ -51,6 +53,8 @@ export interface Candidate extends mongoose.Document {
   aboutMe?: String;
   experience?: Experience[];
   education?: Education[];
+  acceptedJobs: {}[];
+  rejectedJobs: {}[];
 }
 
 interface Experience {

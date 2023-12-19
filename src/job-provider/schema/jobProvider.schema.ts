@@ -8,6 +8,7 @@ export const JobProviderSchema = new mongoose.Schema({
   organisationPAN: String,
   email: String,
   phone: String,
+  password: String,
 });
 
 export interface JobProvider extends mongoose.Document {
@@ -16,8 +17,9 @@ export interface JobProvider extends mongoose.Document {
   location?: string;
   website?: string;
   organisationPAN?: string;
-  email?: string;
-  phone?: string;
+  email: string;
+  phone: string;
+  password: string;
 }
 
 export const CandidateModel = mongoose.model<JobProvider>(

@@ -6,4 +6,10 @@ export class CreateJobProviderDto {
   readonly organisationPAN: string;
   readonly email: string;
   readonly phone: string;
+  readonly password: string;
+}
+
+export class LoginJobProviderDto {
+  readonly email: string;
+  readonly password: string;
 }

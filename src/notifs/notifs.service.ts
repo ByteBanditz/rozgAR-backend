@@ -6,9 +6,13 @@ import { Model } from 'mongoose';
 import { Notifs } from './schema/notifs.schema';
 import axios from 'axios';
 import { Candidate } from 'src/candidate/schema/candidate.schema';
+import { WebSocketServer } from '@nestjs/websockets';
+import { Server } from 'socket.io';
 
 @Injectable()
 export class NotifsService {
+  @WebSocketServer() private server: Server;
+  socketGateway: any;
   constructor(
     @InjectModel('Notifs') private readonly notificationModel: Model<Notifs>,
     @InjectModel('Candidate') private readonly candidateModel: Model<Candidate>,
@@ -52,7 +56,7 @@ export class NotifsService {
     }
   }
 
-  async sendNotificationToCandidate(phone: string): Promise<any> {
+  async notify(phone: string): Promise<any> {
     try {
       // Fetch the FCM token for the candidate with the given phone number
       const candidate = await this.candidateModel.findOne({ phone }).exec();
@@ -127,6 +131,31 @@ export class NotifsService {
       console.log(responses);
 
       // You can return a success message or handle it as needed
+      return { message: 'Notification sent successfully' };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async sendNotificationToCandidate(phone: string): Promise<any> {
+    try {
+      const candidate = await this.candidateModel.findOne({ phone }).exec();
+
+      if (
+        !candidate ||
+        !candidate.fcmToken ||
+        candidate.fcmToken.length === 0
+      ) {
+        throw new Error(
+          `Candidate with phone ${phone} not found or does not have an FCM token`,
+        );
+      }
+
+      // Notify the candidate when the target location is reached
+      this.socketGateway.server.emit('targetLocationReached', {
+        message: 'You have reached the target location!',
+      });
+      this.notify(phone);
       return { message: 'Notification sent successfully' };
     } catch (error) {
       throw error;

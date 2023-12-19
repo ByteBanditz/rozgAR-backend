@@ -11,6 +11,7 @@ export class JobsService {
   constructor(
     @InjectModel('Jobs')
     private readonly jobsModel: Model<Jobs>,
+    @InjectModel('Candidate') private readonly candidateModel: Model<Candidate>,
   ) {}
 
   async create(createJobDto: CreateJobDto): Promise<Jobs> {
@@ -20,6 +21,62 @@ export class JobsService {
 
   async findAll(): Promise<Jobs[]> {
     return this.jobsModel.find().exec();
+  }
+
+  async rejectCandidate(jobId: string, candidateId: string): Promise<any> {
+    const job = await this.jobsModel.findById(jobId).exec();
+    const candidate = await this.candidateModel.findById(candidateId).exec();
+
+    if (!job || !candidate) {
+      throw new NotFoundException('Job or candidate not found');
+    }
+
+    // Remove the candidate from the job's applicants array
+    job.applicants = job.applicants.filter(
+      (applicant) => applicant.toString() !== candidateId,
+    );
+
+    // Update the candidate's rejectedJobs array
+    candidate.rejectedJobs.push(job);
+
+    // Remove the job from the acceptedJobs array if it exists
+    candidate.acceptedJobs = candidate.acceptedJobs.filter(
+      (acceptedJob) => acceptedJob.toString() !== jobId,
+    );
+
+    // Save the updated job and candidate
+    await Promise.all([job.save(), candidate.save()]);
+
+    // Optionally, notify the candidate about the rejection
+
+    return { job, candidate };
+  }
+
+  async acceptCandidate(jobId: string, candidateId: string): Promise<any> {
+    const job = await this.jobsModel.findById(jobId).exec();
+    const candidate = await this.candidateModel.findById(candidateId).exec();
+
+    if (!job || !candidate) {
+      throw new NotFoundException('Job or candidate not found');
+    }
+
+    // Add the candidate to the job's applicants array
+    job.applicants.push(candidate);
+
+    // Update the candidate's acceptedJobs array
+    candidate.acceptedJobs.push(job);
+
+    // Remove the job from the rejectedJobs array if it exists
+    candidate.rejectedJobs = candidate.rejectedJobs.filter(
+      (rejectedJob) => rejectedJob.toString() !== jobId,
+    );
+
+    // Save the updated job and candidate
+    await Promise.all([job.save(), candidate.save()]);
+
+    // Optionally, notify the candidate about the acceptance
+
+    return { job, candidate };
   }
 
   async getApplicants(jobId: string): Promise<any> {

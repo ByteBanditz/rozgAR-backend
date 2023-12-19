@@ -4,10 +4,13 @@ import { UpdateCandidateDto } from './dto/update-candidate.dto';
 import { Candidate } from './schema/candidate.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Jobs } from 'src/jobs/schema/jobs.schema';
 
 @Injectable()
 export class CandidateService {
   constructor(
+    @InjectModel('Jobs')
+    private readonly jobsModel: Model<Jobs>,
     @InjectModel('Candidate') private readonly candidateModel: Model<Candidate>,
   ) {}
 
@@ -37,6 +40,37 @@ export class CandidateService {
 
   async findAll(): Promise<Candidate[]> {
     return this.candidateModel.find().exec();
+  }
+
+  async fetchAcceptedJobs(candidateId: string): Promise<any[]> {
+    const candidate = await this.candidateModel.findById(candidateId).exec();
+
+    if (!candidate) {
+      // Handle the case where the candidate is not found
+      throw new NotFoundException('Candidate not found');
+    }
+
+    // Fetch the accepted jobs for the candidate
+    const acceptedJobs = await this.jobsModel
+      .find({ _id: { $in: candidate.acceptedJobs } })
+      .exec();
+
+    return acceptedJobs;
+  }
+  async fetchRejectedJobs(candidateId: string): Promise<any[]> {
+    const candidate = await this.candidateModel.findById(candidateId).exec();
+
+    if (!candidate) {
+      // Handle the case where the candidate is not found
+      throw new NotFoundException('Candidate not found');
+    }
+
+    // Fetch the accepted jobs for the candidate
+    const rejectedJobs = await this.jobsModel
+      .find({ _id: { $in: candidate.rejectedJobs } })
+      .exec();
+
+    return rejectedJobs;
   }
 
   async fetchCandidateByPhone(phone: string): Promise<Candidate> {

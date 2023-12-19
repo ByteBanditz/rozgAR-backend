@@ -7,6 +7,9 @@ import { JobsModule } from './jobs/jobs.module';
 import { JobProviderModule } from './job-provider/job-provider.module';
 import { NotifsModule } from './notifs/notifs.module';
 import { AuthModule } from './auth/auth.module';
+import { SocketGateway } from './gateway/socket.gateway';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -20,6 +23,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SocketGateway],
 })
 export class AppModule {}
