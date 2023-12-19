@@ -39,6 +39,15 @@ export class CandidateService {
     return this.candidateModel.find().exec();
   }
 
+  async fetchCandidateByPhone(phone: string): Promise<Candidate> {
+    const candidate = await this.candidateModel.findOne({ phone }).exec();
+
+    if (!candidate) {
+      throw new NotFoundException(`Candidate with phone:${phone} not found`);
+    }
+    return candidate;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} candidate`;
   }

@@ -4,6 +4,7 @@ export class CreateJobDto {
   readonly location: string;
   readonly reqQualification: string;
   readonly salary: string;
+  readonly requiredSkills: string[];
   readonly vacancies: string;
   readonly minAge: string;
   readonly experience: string;

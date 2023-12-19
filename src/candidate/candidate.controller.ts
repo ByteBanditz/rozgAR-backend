@@ -30,9 +30,9 @@ export class CandidateController {
     return this.candidateService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.candidateService.findOne(+id);
+  @Get(':phone')
+  fetchCandidateByPhone(@Param('phone') phone: string) {
+    return this.candidateService.fetchCandidateByPhone(phone);
   }
 
   @Patch(':id')

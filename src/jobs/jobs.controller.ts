@@ -36,6 +36,19 @@ export class JobsController {
     return this.jobsService.getApplicants(id);
   }
 
+  @Post('jobsMatchingSkills')
+  fetchJobsMatchingSkills(@Body() candidate: Candidate) {
+    return this.jobsService.fetchJobsMatchingSkills(candidate);
+  }
+
+  @Post('jobsPrefLocation/:limit')
+  fetchJobsPrefLocation(
+    @Body() candidate: Candidate,
+    @Param('limit') limit: number,
+  ) {
+    return this.jobsService.fetchJobsByPreferredLocation(candidate, limit);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
     return this.jobsService.update(+id, updateJobDto);
