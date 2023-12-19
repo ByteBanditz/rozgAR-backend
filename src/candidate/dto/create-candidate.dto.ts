@@ -9,6 +9,7 @@ export class CreateCandidateDto {
   readonly skills: string[];
   readonly image: string;
   readonly educationLevel: string;
+  readonly fcmToken: string[];
   readonly email: string;
   readonly lookingForJob: boolean;
   readonly aboutMe: string;
