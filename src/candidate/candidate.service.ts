@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { UpdateCandidateDto } from './dto/update-candidate.dto';
 import { Candidate } from './schema/candidate.schema';
@@ -14,6 +14,25 @@ export class CandidateService {
   async create(createCandidateDto: CreateCandidateDto): Promise<Candidate> {
     const createdCandidate = new this.candidateModel(createCandidateDto);
     return createdCandidate.save();
+  }
+
+  async addFcmToken(token: string, phone: string): Promise<Candidate> {
+    try {
+      const candidate = await this.candidateModel.findOne({ phone }).exec();
+
+      if (!candidate) {
+        throw new NotFoundException(`Candidate with phone:${phone} not found`);
+      }
+
+      candidate.fcmToken.push(token);
+
+      await candidate.save();
+
+      return candidate;
+    } catch (error) {
+      // Handle any errors that may occur during the process
+      throw error;
+    }
   }
 
   async findAll(): Promise<Candidate[]> {

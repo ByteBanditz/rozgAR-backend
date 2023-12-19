@@ -11,4 +11,23 @@ export class CreateCandidateDto {
   readonly educationLevel: string;
   readonly email: string;
   readonly lookingForJob: boolean;
+  readonly aboutMe: string;
+  readonly experience: ExperienceDto[];
+  readonly education: EducationDto[];
+}
+
+export class ExperienceDto {
+  readonly title: string;
+  readonly company: string;
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly description: string;
+}
+
+export class EducationDto {
+  readonly institution: string;
+  readonly course: string;
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly description: string;
 }

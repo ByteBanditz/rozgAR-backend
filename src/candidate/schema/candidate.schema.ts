@@ -1,5 +1,20 @@
 import * as mongoose from 'mongoose';
 
+const ExperienceSchema = new mongoose.Schema({
+  title: String,
+  company: String,
+  startDate: Date,
+  endDate: Date,
+  description: String,
+});
+const EducationSchema = new mongoose.Schema({
+  institution: String,
+  course: String,
+  startDate: Date,
+  endDate: Date,
+  description: String,
+});
+
 export const CandidateSchema = new mongoose.Schema({
   name: String,
   age: Number,
@@ -13,6 +28,10 @@ export const CandidateSchema = new mongoose.Schema({
   educationLevel: String,
   email: String,
   lookingForJob: Boolean,
+  fcmToken: [String],
+  aboutMe: String,
+  experience: [ExperienceSchema],
+  education: [EducationSchema],
 });
 
 export interface Candidate extends mongoose.Document {
@@ -28,6 +47,26 @@ export interface Candidate extends mongoose.Document {
   educationLevel?: string;
   email?: string;
   lookingForJob: boolean;
+  fcmToken?: string[];
+  aboutMe?: String;
+  experience?: Experience[];
+  education?: Education[];
+}
+
+interface Experience {
+  title: string;
+  company: string;
+  startDate: Date;
+  endDate: Date;
+  description: string;
+}
+
+interface Education {
+  institution: string;
+  course: string;
+  startDate: Date;
+  endDate: Date;
+  description: string;
 }
 
 export const CandidateModel = mongoose.model<Candidate>(
