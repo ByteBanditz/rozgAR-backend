@@ -127,9 +127,10 @@ export class JobsService {
     }
   }
 
-  async fetchJobsMatchingSkills(phone: string): Promise<Jobs[]> {
+  async fetchJobsMatchingSkills(phone: any): Promise<Jobs[]> {
     try {
-      const candidate = await this.candidateModel.findOne({ phone }).exec();
+      const candidate = await this.candidateModel.findOne(phone).exec();
+
       // Assuming candidate skills are stored in an array called 'skills' in the Candidate model
       const candidateSkills = candidate.skills;
 
