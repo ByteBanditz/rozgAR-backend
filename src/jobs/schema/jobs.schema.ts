@@ -14,6 +14,7 @@ export const JobsSchema = new mongoose.Schema({
   salary: String,
   vacancies: String,
   minAge: String,
+  image: String,
   experience: String,
   gender: String,
   description: String,
@@ -27,6 +28,7 @@ export interface Jobs extends mongoose.Document {
   employerName?: string;
   location?: string;
   lat: string;
+  image: string;
   long: string;
   reqQualification?: string;
   salary?: string;

@@ -6,6 +6,7 @@ export class CreateJobDto {
   readonly salary: string;
   readonly requiredSkills: string[];
   readonly vacancies: string;
+  readonly image: string;
   readonly minAge: string;
   readonly experience: string;
   readonly gender: string;

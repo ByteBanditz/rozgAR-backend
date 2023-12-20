@@ -19,6 +19,17 @@ export class JobsService {
     return createdJobProvider.save();
   }
 
+  async fetchJobById(id: string): Promise<any> {
+    console.log(id);
+
+    const candidate = await this.jobsModel.find({ _id: id }).exec();
+
+    if (!candidate) {
+      throw new NotFoundException(`Job with phone:${id} not found`);
+    }
+    return candidate;
+  }
+
   async findAll(): Promise<Jobs[]> {
     return this.jobsModel.find().exec();
   }
@@ -107,8 +118,9 @@ export class JobsService {
     }
   }
 
-  async applyToJob(jobId: string, candidate: Candidate): Promise<any> {
+  async applyToJob(jobId: string, phone: string): Promise<any> {
     try {
+      const candidate = await this.candidateModel.findOne({ phone }).exec();
       const job = await this.jobsModel.findById(jobId).exec();
 
       if (!job) {
@@ -150,11 +162,13 @@ export class JobsService {
   }
 
   async fetchJobsByPreferredLocation(
-    phone: string,
+    phone: any,
     limit: number,
   ): Promise<Jobs[]> {
     try {
-      const candidate = await this.candidateModel.findOne({ phone }).exec();
+      const candidate = await this.candidateModel
+        .findOne({ phone: phone.phone })
+        .exec();
       const preferredLocation = candidate.prefferedLocation;
       // Define sort criteria using $cond
       const sortCriteria = {

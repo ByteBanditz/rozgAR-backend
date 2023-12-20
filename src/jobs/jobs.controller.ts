@@ -29,9 +29,14 @@ export class JobsController {
     return this.jobsService.findAll();
   }
 
+  @Get(':id')
+  fetchJobById(@Param('id') id: string) {
+    return this.jobsService.fetchJobById(id);
+  }
+
   @Post('apply/:id')
-  applyToJob(@Param('id') id: string, @Body() candidate: Candidate) {
-    return this.jobsService.applyToJob(id, candidate);
+  applyToJob(@Param('id') id: string, @Body() phone: string) {
+    return this.jobsService.applyToJob(id, phone);
   }
 
   @Get('applied-jobs/:phone')
