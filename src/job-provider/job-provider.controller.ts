@@ -20,7 +20,6 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 export class JobProviderController {
   constructor(private readonly jobProviderService: JobProviderService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createJobProviderDto: CreateJobProviderDto) {
     return this.jobProviderService.create(createJobProviderDto);
