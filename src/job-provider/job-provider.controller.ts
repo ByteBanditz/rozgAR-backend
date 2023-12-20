@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { JobProviderService } from './job-provider.service';
 import {
@@ -13,11 +14,13 @@ import {
   LoginJobProviderDto,
 } from './dto/create-job-provider.dto';
 import { UpdateJobProviderDto } from './dto/update-job-provider.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('job-provider')
 export class JobProviderController {
   constructor(private readonly jobProviderService: JobProviderService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createJobProviderDto: CreateJobProviderDto) {
     return this.jobProviderService.create(createJobProviderDto);

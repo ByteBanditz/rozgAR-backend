@@ -35,6 +35,12 @@ export class JobsController {
     return this.jobsService.applyToJob(id, candidate);
   }
 
+  @Get('applied-jobs/:phone')
+  async getAppliedJobs(@Param('phone') phone: string): Promise<any> {
+    const jobs = await this.jobsService.getJobsByCandidatePhone(phone);
+    return jobs;
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post(':jobId/accept/:candidateId')
   async acceptCandidate(

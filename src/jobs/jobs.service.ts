@@ -23,6 +23,18 @@ export class JobsService {
     return this.jobsModel.find().exec();
   }
 
+  async getJobsByCandidatePhone(phone: string): Promise<Jobs[]> {
+    const jobs = await this.jobsModel
+      .find({ 'applicants.phone': phone })
+      .exec();
+
+    if (!jobs || jobs.length === 0) {
+      throw new NotFoundException(`No jobs applied to`);
+    }
+
+    return jobs;
+  }
+
   async rejectCandidate(jobId: string, candidateId: string): Promise<any> {
     const job = await this.jobsModel.findById(jobId).exec();
     const candidate = await this.candidateModel.findById(candidateId).exec();
