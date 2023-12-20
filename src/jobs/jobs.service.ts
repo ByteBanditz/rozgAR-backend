@@ -118,10 +118,14 @@ export class JobsService {
     }
   }
 
-  async applyToJob(jobId: string, phone: string): Promise<any> {
+  async applyToJob(jobId: string, phone: any): Promise<any> {
     try {
-      const candidate = await this.candidateModel.findOne({ phone }).exec();
-      const job = await this.jobsModel.findById(jobId).exec();
+      console.log(phone);
+
+      const candidate = await this.candidateModel
+        .findOne({ phone: phone.phone })
+        .exec();
+      const job = await this.jobsModel.findOne({ _id: jobId }).exec();
 
       if (!job) {
         throw new NotFoundException(`Job with id ${jobId} not found`);
