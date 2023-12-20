@@ -127,8 +127,9 @@ export class JobsService {
     }
   }
 
-  async fetchJobsMatchingSkills(candidate: Candidate): Promise<Jobs[]> {
+  async fetchJobsMatchingSkills(phone: string): Promise<Jobs[]> {
     try {
+      const candidate = await this.candidateModel.findOne({ phone }).exec();
       // Assuming candidate skills are stored in an array called 'skills' in the Candidate model
       const candidateSkills = candidate.skills;
 
@@ -148,10 +149,11 @@ export class JobsService {
   }
 
   async fetchJobsByPreferredLocation(
-    candidate: Candidate,
+    phone: string,
     limit: number,
   ): Promise<Jobs[]> {
     try {
+      const candidate = await this.candidateModel.findOne({ phone }).exec();
       const preferredLocation = candidate.prefferedLocation;
       // Define sort criteria using $cond
       const sortCriteria = {

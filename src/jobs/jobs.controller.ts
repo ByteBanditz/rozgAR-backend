@@ -70,16 +70,13 @@ export class JobsController {
   }
 
   @Post('jobsMatchingSkills')
-  fetchJobsMatchingSkills(@Body() candidate: Candidate) {
-    return this.jobsService.fetchJobsMatchingSkills(candidate);
+  fetchJobsMatchingSkills(@Body() phone: string) {
+    return this.jobsService.fetchJobsMatchingSkills(phone);
   }
 
   @Post('jobsPrefLocation/:limit')
-  fetchJobsPrefLocation(
-    @Body() candidate: Candidate,
-    @Param('limit') limit: number,
-  ) {
-    return this.jobsService.fetchJobsByPreferredLocation(candidate, limit);
+  fetchJobsPrefLocation(@Body() phone: string, @Param('limit') limit: number) {
+    return this.jobsService.fetchJobsByPreferredLocation(phone, limit);
   }
 
   @Patch(':id')
